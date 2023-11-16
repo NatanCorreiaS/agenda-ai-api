@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon",
     "build": "npx tsc",
-    "start": "npx ts-node ."
+    "start": "node ./dist/main.js"
   },
   "keywords": [],
   "author": "",
