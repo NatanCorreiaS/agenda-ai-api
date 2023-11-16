@@ -4,15 +4,17 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import compression from "compression";
 import cors from "cors";
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
 import mongoose from "mongoose";
 import router from "./routers";
 
-dotenv.config();
+// dotenv.config();
 
 // Connecting to the database
 
-mongoose.connect(process.env.MONGO_URL);
+mongoose.connect(
+  "mongodb+srv://reader:leitor123@agenda-ai.x0yytdz.mongodb.net/?retryWrites=true&w=majority"
+);
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
@@ -39,6 +41,6 @@ app.use(router());
 const server = http.createServer(app);
 
 // Listening to the server
-server.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
+server.listen(5000, () => {
+  console.log(`Server running on port 5000`);
 });
