@@ -6,10 +6,11 @@ const appointmentSchema = new mongoose.Schema({
   date: {
     type: Date,
     required: true,
-    min: new Date("2023-11-11T08:00:00.000Z"),
-    max: new Date("2023-11-11T12:00:00.000Z"),
+    min: new Date("2023-11-26T08:00:00.000Z"),
+    max: new Date("2023-12-31T12:00:00.000Z"),
   },
   clinic: { type: String, required: true },
+  consultationType: { type: String, required: true },
 });
 
 export const AppointmentModel = mongoose.model(

@@ -109,3 +109,15 @@ export const deleteAllUsers = async (
     return res.sendStatus(400);
   }
 };
+
+export const getId = async (req: express.Request, res: express.Response) => {
+  try {
+    const { email } = req.body;
+    const user = await findUserByEmail(email);
+    if (!user) return res.status(400).json({ message: "User not found" });
+    return res.status(200).json({ id: user._id });
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(400);
+  }
+};

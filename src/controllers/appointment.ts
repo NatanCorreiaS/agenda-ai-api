@@ -1,13 +1,26 @@
 import express from "express";
-import { AppointmentModel, findAppointmentByDate } from "../db/appointment";
+import {
+  AppointmentModel,
+  findAppointmentByDate,
+  findAppointmentByUserId,
+} from "../db/appointment";
 
 export const makeAppointment = async (
   req: express.Request,
   res: express.Response
 ) => {
   try {
-    const { userId, date, clinic } = req.body;
-    console.log("userId: ", userId, " date: ", date, " clinic: ", clinic);
+    const { userId, date, clinic, consultationType } = req.body;
+    console.log(
+      "userId: ",
+      userId,
+      " date: ",
+      date,
+      " clinic: ",
+      clinic,
+      " consultationType: ",
+      consultationType
+    );
 
     const dateAlreadyPicked = await findAppointmentByDate(date).select(
       "+clinic"
@@ -15,12 +28,19 @@ export const makeAppointment = async (
 
     if (dateAlreadyPicked) {
       if (dateAlreadyPicked.clinic === clinic) {
-        return res.status(400).json({ message: "Data já agendada." });
+        if (dateAlreadyPicked.consultationType === consultationType) {
+          return res.status(400).json({ message: "Data já agendada." });
+        }
       }
     }
 
     // Criar o agendamento
-    const appointment = await new AppointmentModel({ userId, date, clinic });
+    const appointment = await new AppointmentModel({
+      userId,
+      date,
+      clinic,
+      consultationType,
+    });
 
     // Salvar o agendamento no banco de dados
     await appointment.save();
@@ -51,6 +71,48 @@ export const findAllAppointments = async (
   try {
     const appointments = await AppointmentModel.find({});
     res.status(200).json(appointments);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(400);
+  }
+};
+
+export const findAllAppointmentsByUserId = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { userId } = req.body;
+    const appointments = await findAppointmentByUserId(userId);
+    res.status(200).json(appointments);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(400);
+  }
+};
+
+export const findAppointmentById = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { id } = req.body;
+    const appointment = await AppointmentModel.findById(id);
+    res.status(200).json(appointment);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(400);
+  }
+};
+
+export const findByDate = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { date } = req.body;
+    const appointment = await findAppointmentByDate(date);
+    res.status(200).json(appointment);
   } catch (error) {
     console.error(error);
     res.sendStatus(400);
