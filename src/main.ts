@@ -12,9 +12,7 @@ import router from "./routers";
 
 // Connecting to the database
 
-mongoose.connect(
-  "mongodb+srv://reader:leitor123@agenda-ai.x0yytdz.mongodb.net/?retryWrites=true&w=majority"
-);
+mongoose.connect("");
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
