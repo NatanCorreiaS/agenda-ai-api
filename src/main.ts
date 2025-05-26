@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import compression from "compression";
 import cors from "cors";
-// import dotenv from "dotenv";
+import dotenv from "dotenv";
 import mongoose from "mongoose";
 import router from "./routers";
 
@@ -12,7 +12,13 @@ import router from "./routers";
 
 // Connecting to the database
 
-mongoose.connect("");
+dotenv.config({ path: "./.env" });
+// Replace with your MongoDB connection string
+if (!process.env.MONGODB_URI) {
+  throw new Error("MONGODB_URI is not defined in .env file");
+}
+
+mongoose.connect(process.env.MONGODB_URI);
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));

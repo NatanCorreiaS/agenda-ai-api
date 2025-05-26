@@ -15,7 +15,6 @@ export const deleteUser = async (
   res: express.Response
 ) => {
   try {
-    //  Checking if the request has id, cpf or email
     // Id is a param
     const { id } = req.params;
     const { password, email } = req.body;
@@ -121,3 +120,10 @@ export const getId = async (req: express.Request, res: express.Response) => {
     return res.sendStatus(400);
   }
 };
+
+// JSON FORMAT TO BE SENT IN THE BODY OF THE REQUEST
+// {
+//   "name": "Nome do Usuário",
+//   "email": "
+//   "password": "Senha do Usuário"
+// }

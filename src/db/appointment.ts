@@ -1,41 +1,58 @@
 import mongoose from "mongoose";
+import { PhysicianModel } from "./physician";
 
 // Definir o esquema do agendamento
 const appointmentSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  physicianId: { type: mongoose.Schema.Types.ObjectId, ref: "Physician", required: true },
   date: {
     type: Date,
     required: true,
-    min: new Date("2023-11-26T08:00:00.000Z"),
-    max: new Date("2023-12-31T12:00:00.000Z"),
+    validate: {
+      validator: function (value: Date) {
+        return value >= new Date();
+      },
+      message: "A data do agendamento deve ser igual ou posterior à data atual.",
+    },
   },
-  clinic: { type: String, required: true },
-  consultationType: { type: String, required: true },
+  consultationType: { type: String, required: false }, // Agora preenchido automaticamente
+  clinic: { type: String, required: false }, // Preenchido automaticamente
+});
+
+// Middleware para preencher clinic e consultationType automaticamente
+appointmentSchema.pre("save", async function (next) {
+  if ((!(this as any).clinic || !(this as any).consultationType) && this.physicianId) {
+    const physician = await PhysicianModel.findById(this.physicianId);
+    if (physician) {
+      if (!(this as any).clinic) {
+        (this as any).clinic = physician.clinic;
+      }
+      if (!(this as any).consultationType) {
+        (this as any).consultationType = physician.specialization;
+      }
+    }
+  }
+  next();
 });
 
 export const AppointmentModel = mongoose.model(
   "Appointment",
   appointmentSchema
 );
+
 // Handlers
 
-// Delete
 export const deleteAllAppointments = () => AppointmentModel.deleteMany({});
 
-// Create
 export const createAppointment = (appointment: Record<string, any>) =>
   new AppointmentModel(appointment)
     .save()
     .then((appointmentObj) => appointmentObj.toObject());
 
-// Find All
 export const findAll = () => AppointmentModel.find({});
-// Find by id
 export const findAppointmentById = (id: string) =>
   AppointmentModel.findById(id);
-// Find by userId
 export const findAppointmentByUserId = (userId: string) =>
   AppointmentModel.find({ userId });
-// Find by date
 export const findAppointmentByDate = (date: string) =>
   AppointmentModel.findOne({ date });

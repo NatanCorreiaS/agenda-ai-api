@@ -3,6 +3,7 @@ import {
   AppointmentModel,
   findAppointmentByDate,
   findAppointmentByUserId,
+  createAppointment,
 } from "../db/appointment";
 
 export const makeAppointment = async (
@@ -10,40 +11,29 @@ export const makeAppointment = async (
   res: express.Response
 ) => {
   try {
-    const { userId, date, clinic, consultationType } = req.body;
-    console.log(
-      "userId: ",
-      userId,
-      " date: ",
-      date,
-      " clinic: ",
-      clinic,
-      " consultationType: ",
-      consultationType
-    );
+    const { userId, physicianId, date } = req.body;
 
-    const dateAlreadyPicked = await findAppointmentByDate(date).select(
-      "+clinic"
-    );
+    if (!userId || !physicianId || !date) {
+      return res.status(400).json({ message: "Campos obrigatórios ausentes." });
+    }
+
+    // Verifica se já existe agendamento para o mesmo médico e data
+    const dateAlreadyPicked = await findAppointmentByDate(date);
 
     if (dateAlreadyPicked) {
-      if (dateAlreadyPicked.clinic === clinic) {
-        if (dateAlreadyPicked.consultationType === consultationType) {
-          return res.status(400).json({ message: "Data já agendada." });
-        }
+      if (
+        String(dateAlreadyPicked.physicianId) === String(physicianId)
+      ) {
+        return res.status(400).json({ message: "Data já agendada para este médico." });
       }
     }
 
-    // Criar o agendamento
-    const appointment = await new AppointmentModel({
+    // Criar o agendamento (clinic e consultationType serão preenchidos automaticamente)
+    const appointment = await createAppointment({
       userId,
+      physicianId,
       date,
-      clinic,
-      consultationType,
     });
-
-    // Salvar o agendamento no banco de dados
-    await appointment.save();
 
     res.status(201).json(appointment);
   } catch (error) {
@@ -118,3 +108,14 @@ export const findByDate = async (
     res.sendStatus(400);
   }
 };
+
+
+
+// JSON FORMAT TO BE SENT IN THE BODY OF THE REQUEST
+// {
+//   "userId": "ID_DO_USUÁRIO",
+//   "physicianId": "ID_DO_MÉDICO",
+//   "date": "2023-10-01T10:00:00Z", // Data do agendamento
+//   "consultationType": "Tipo de consulta" // Ex: "Consulta Geral", "Exame", etc.
+// }
+

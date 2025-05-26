@@ -10,10 +10,10 @@ import {
 
 // Routing for appointment controller
 export default (router: express.Router) => {
-  router.post("/api/appointment", makeAppointment);
-  router.post("/api/appointment/user", findAllAppointmentsByUserId);
-  router.delete("/api/appointment/delete", deleteAllAppointments);
-  router.get("/api/appointment", findAllAppointments);
-  router.post("/api/appointment/date", findByDate);
-  router.post("/api/appointment/id", findAppointmentById);
+  router.post("/api/appointments", makeAppointment);
+  router.post("/api/appointments/user", findAllAppointmentsByUserId);
+  router.delete("/api/appointments/delete", deleteAllAppointments);
+  router.get("/api/appointments", findAllAppointments);
+  router.post("/api/appointments/date", findByDate);
+  router.post("/api/appointments/id", findAppointmentById);
 };
