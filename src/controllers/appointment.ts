@@ -116,6 +116,5 @@ export const findByDate = async (
 //   "userId": "ID_DO_USUÁRIO",
 //   "physicianId": "ID_DO_MÉDICO",
 //   "date": "2023-10-01T10:00:00Z", // Data do agendamento
-//   "consultationType": "Tipo de consulta" // Ex: "Consulta Geral", "Exame", etc.
 // }
 
