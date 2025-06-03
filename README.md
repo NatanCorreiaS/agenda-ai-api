@@ -102,9 +102,10 @@ Cria um novo médico com os dados fornecidos.
 ```json
 {
   "name": "string",
-  "specialty": "string",
+  "specialization": "string",
   "clinic": "string",
   "email": "string",
+  "password": "string",
   "availableDays": ["segunda", "terça", "quarta", "quinta", "sexta"]
 }   
 ```
@@ -114,7 +115,7 @@ Cria um novo médico com os dados fornecidos.
 {
   "id": "integer",
   "name": "string",
-  "specialty": "string",
+  "specialization": "string",
   "clinic": "string",
   "email": "string",
   "availableDays": ["segunda", "terça", "quarta", "quinta", "sexta"]
@@ -129,7 +130,7 @@ Obtém uma lista de todos os médicos.
   {
     "id": "integer",
     "name": "string",
-    "specialty": "string",
+    "specialization": "string",
     "clinic": "string",
     "email": "string",
     "availableDays": ["segunda", "terça", "quarta", "quinta", "sexta"]
@@ -144,7 +145,7 @@ Obtém os detalhes de um médico específico.
 {
   "id": "integer",
   "name": "string",
-  "specialty": "string",
+  "specialization": "string",
   "clinic": "string",
   "email": "string",
   "availableDays": ["segunda", "terça", "quarta", "quinta", "sexta"]
@@ -157,7 +158,7 @@ Atualiza os dados de um médico específico.
 ```json
 {
   "name": "string",
-  "specialty": "string",
+  "specialization": "string",
   "clinic": "string",
   "email": "string",
   "availableDays": ["segunda", "terça", "quarta", "quinta", "sexta"]
@@ -169,7 +170,7 @@ Atualiza os dados de um médico específico.
 {
   "id": "integer",
   "name": "string",
-  "specialty": "string",
+  "specialization": "string",
   "clinic": "string",
   "email": "string",
   "availableDays": ["segunda", "terça", "quarta", "quinta", "sexta"]
@@ -201,7 +202,7 @@ Autentica um médico com as credenciais fornecidas.
   "physician": {
     "id": "_id",
     "name": "string",
-    "specialty": "string",
+    "specialization": "string",
     "clinic": "string",
     "email": "string",
     "availableDays": ["segunda", "terça", "quarta", "quinta", "sexta"]
